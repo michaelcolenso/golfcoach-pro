@@ -1,0 +1,431 @@
+# GolfCoach Pro - Git Ignore
+
+ 
+
+# ============================================
+
+# Environment & Secrets
+
+# ============================================
+
+.env
+
+.env.local
+
+.env.*.local
+
+*.pem
+
+*.key
+
+secrets/
+
+ 
+
+# ============================================
+
+# Python
+
+# ============================================
+
+__pycache__/
+
+*.py[cod]
+
+*$py.class
+
+*.so
+
+.Python
+
+build/
+
+develop-eggs/
+
+dist/
+
+downloads/
+
+eggs/
+
+.eggs/
+
+lib/
+
+lib64/
+
+parts/
+
+sdist/
+
+var/
+
+wheels/
+
+*.egg-info/
+
+.installed.cfg
+
+*.egg
+
+MANIFEST
+
+pip-log.txt
+
+pip-delete-this-directory.txt
+
+ 
+
+# Virtual environments
+
+venv/
+
+ENV/
+
+env/
+
+.venv
+
+poetry.lock
+
+ 
+
+# PyCharm
+
+.idea/
+
+ 
+
+# VS Code
+
+.vscode/
+
+*.code-workspace
+
+ 
+
+# Jupyter Notebook
+
+.ipynb_checkpoints
+
+*.ipynb
+
+ 
+
+# pytest
+
+.pytest_cache/
+
+.coverage
+
+htmlcov/
+
+coverage.xml
+
+*.cover
+
+ 
+
+# mypy
+
+.mypy_cache/
+
+.dmypy.json
+
+dmypy.json
+
+ 
+
+# ============================================
+
+# JavaScript / Node.js
+
+# ============================================
+
+node_modules/
+
+npm-debug.log*
+
+yarn-debug.log*
+
+yarn-error.log*
+
+package-lock.json
+
+yarn.lock
+
+ 
+
+# Expo
+
+.expo/
+
+.expo-shared/
+
+web-build/
+
+ 
+
+# Next.js
+
+.next/
+
+out/
+
+ 
+
+# React Native
+
+.react-native/
+
+ 
+
+# ============================================
+
+# Databases
+
+# ============================================
+
+*.db
+
+*.sqlite
+
+*.sqlite3
+
+*.sql.gz
+
+ 
+
+# PostgreSQL
+
+*.dump
+
+postgres_data/
+
+ 
+
+# Redis
+
+redis_data/
+
+ 
+
+# ============================================
+
+# Storage
+
+# ============================================
+
+uploads/
+
+videos/
+
+tmp/
+
+temp/
+
+*.mp4
+
+*.mov
+
+*.avi
+
+!test-videos/sample.mp4
+
+ 
+
+# MinIO
+
+minio_data/
+
+ 
+
+# ============================================
+
+# Logs
+
+# ============================================
+
+*.log
+
+logs/
+
+log/
+
+ 
+
+# ============================================
+
+# OS
+
+# ============================================
+
+.DS_Store
+
+.DS_Store?
+
+._*
+
+.Spotlight-V100
+
+.Trashes
+
+ehthumbs.db
+
+Thumbs.db
+
+ 
+
+# ============================================
+
+# Docker
+
+# ============================================
+
+docker-compose.override.yml
+
+ 
+
+# ============================================
+
+# Testing
+
+# ============================================
+
+.tox/
+
+.coverage
+
+.coverage.*
+
+.cache
+
+nosetests.xml
+
+coverage.xml
+
+*.cover
+
+.hypothesis/
+
+ 
+
+# ============================================
+
+# ML Models
+
+# ============================================
+
+*.h5
+
+*.pkl
+
+*.pth
+
+*.onnx
+
+models/
+
+checkpoints/
+
+ 
+
+# ============================================
+
+# Documentation Build
+
+# ============================================
+
+docs/_build/
+
+site/
+
+ 
+
+# ============================================
+
+# Temporary Files
+
+# ============================================
+
+*.tmp
+
+*.bak
+
+*.swp
+
+*~
+
+ 
+
+# ============================================
+
+# CI/CD
+
+# ============================================
+
+.github/workflows/*.local.yml
+
+ 
+
+# ============================================
+
+# Mobile Specific
+
+# ============================================
+
+# iOS
+
+ios/Pods/
+
+ios/build/
+
+*.pbxuser
+
+*.mode1v3
+
+*.mode2v3
+
+*.perspectivev3
+
+*.xcuserstate
+
+ios/.xcode.env.local
+
+ 
+
+# Android
+
+android/app/build/
+
+android/.gradle/
+
+android/local.properties
+
+*.apk
+
+*.aab
+
+ 
+
+# ============================================
+
+# Monitoring
+
+# ============================================
+
+prometheus_data/
+
+grafana_data/
+
+ 
+
+# ============================================
+
+# Backup
+
+# ============================================
+
+backup/
+
+*.backup
