@@ -1,30 +1,81 @@
 # Claude.md - AI Agent Development Guide
 
- 
+
 
 ## Project Overview
 
- 
+
 
 **GolfCoach Pro** is an AI-powered golf coaching application that provides real-time swing analysis, personalized feedback, and biomechanical insights using frontier AI models. This is the "Tiger Woods version" of golf coaching software.
 
- 
+
+
+## 🚨 CURRENT PROJECT STATE 🚨
+
+
+
+**This repository is currently in the PLANNING & DOCUMENTATION phase.**
+
+
+
+### What CURRENTLY EXISTS (As of Jan 2026):
+
+✅ **Root-level Documentation:**
+- `CLAUDE.md` (this file) - AI agent development guide
+- `README.md` - Project overview and quick start
+- `ARCHITECTURE.md` - Detailed system architecture
+- `API_SPEC.md` - Complete API specifications
+- `ROADMAP.md` - Development roadmap and milestones
+- `REAL_TIME_ANALYSIS.md` - Feature specification for real-time analysis
+- `GETTING_STARTED.md` - Developer onboarding guide
+
+✅ **Infrastructure Configuration:**
+- `docker-compose.yaml` - Full multi-service development stack (PostgreSQL, Redis, MinIO, backend, Celery, monitoring)
+- `.env.example` - Comprehensive environment variable template
+- `.gitignore` - Git ignore rules for all project components
+- `quickstart.sh` - Automated setup script
+
+### What DOES NOT EXIST YET (To Be Implemented):
+
+❌ **No `backend/` directory** - FastAPI server not implemented yet
+❌ **No `mobile/` directory** - React Native app not created yet
+❌ **No `web/` directory** - Next.js web app not created yet
+❌ **No `ml/` directory** - ML models not implemented yet
+❌ **No `infrastructure/` directory** - Terraform/K8s configs not created yet
+❌ **No `docs/` directory** - Subdirectory feature specs not written yet
+❌ **No `.github/workflows/` directory** - CI/CD pipelines not configured yet
+❌ **No `scripts/` directory** - Utility scripts not created yet (except quickstart.sh)
+
+**This is intentional!** This is a **documentation-first, architecture-first approach** where we:
+1. ✅ Define the complete architecture and specifications
+2. ✅ Design the API contract and data models
+3. ✅ Set up infrastructure configuration
+4. ⏳ Begin implementation with clear direction (NEXT PHASE)
+
+### Current Git Branch Status:
+- Repository initialized with comprehensive planning documentation
+- Ready for feature branch development to begin
+- Docker Compose infrastructure ready to support development
+
+
 
 ## Quick Context for AI Agents
 
- 
+
 
 When working on this project, you should:
 
- 
+
 
 1. **Read this file first** - It contains critical context about architecture, decisions, and workflows
 
-2. **Check `/docs` directory** - Detailed specifications for features, API design, and architecture
+2. **Check root-level .md files** - ARCHITECTURE.md, API_SPEC.md, ROADMAP.md, REAL_TIME_ANALYSIS.md, GETTING_STARTED.md
 
-3. **Follow established patterns** - We prioritize consistency over cleverness
+3. **Understand we're in planning phase** - Implementation directories don't exist yet; refer to docs for intended structure
 
-4. **Test as you build** - Every feature should have tests before merging
+4. **Follow the documented architecture** - When creating code, follow the patterns described in this file
+
+5. **Test as you build** - Every feature should have tests before merging (once implementation begins)
 
  
 
@@ -772,96 +823,71 @@ Closes #123
 
 ## Common Tasks for AI Agents
 
- 
+**NOTE**: These tasks assume implementation has begun. Currently, implementation directories don't exist yet.
 
-### Task: Add a new API endpoint
+### Task: Add a new API endpoint (Once backend/ exists)
 
- 
-
-1. Read `/docs/api/API_SPEC.md` for conventions
-
-2. Create route in `backend/app/api/v1/`
-
+1. Read `API_SPEC.md` in repository root for conventions
+2. Create route in `backend/app/api/v1/` (directory to be created)
 3. Define Pydantic schemas in `backend/app/schemas/`
-
 4. Implement service logic in `backend/app/services/`
-
 5. Add tests in `backend/tests/`
-
 6. Update OpenAPI docs (automatic with FastAPI)
 
- 
+### Task: Add a new screen to mobile app (Once mobile/ exists)
 
-### Task: Add a new screen to mobile app
-
- 
-
-1. Read design spec in `/docs/features/`
-
-2. Create screen component in `mobile/src/screens/`
-
+1. Read design spec in documentation files (ARCHITECTURE.md, feature specs)
+2. Create screen component in `mobile/src/screens/` (directory to be created)
 3. Create reusable components in `mobile/src/components/`
-
 4. Add navigation route
-
 5. Connect to API using React Query hooks
-
 6. Add loading/error states
-
 7. Write component tests
 
- 
+### Task: Implement a new AI feature (Once backend/ exists)
 
-### Task: Implement a new AI feature
-
- 
-
-1. Read AI feature spec in `/docs/features/`
-
-2. Design prompt in `backend/app/services/prompts/`
-
+1. Read AI feature specs in documentation files (see REAL_TIME_ANALYSIS.md, ARCHITECTURE.md)
+2. Design prompt in `backend/app/services/prompts/` (directory to be created)
 3. Implement service in `backend/app/services/`
-
 4. Add caching for expensive calls (Redis)
-
 5. Add fallback for AI failures
-
 6. Monitor token usage and costs
-
 7. Test with various video types
 
- 
+### Task: Start Backend Implementation (FIRST IMPLEMENTATION TASK)
 
-### Task: Optimize a slow query
+1. Create `backend/` directory structure as documented
+2. Set up Python project with Poetry (`pyproject.toml`)
+3. Create FastAPI app skeleton (`backend/app/main.py`)
+4. Set up Alembic for migrations (`backend/alembic/`)
+5. Create initial database models based on API_SPEC.md
+6. Write Dockerfile for backend service
+7. Test with `docker-compose up backend`
 
- 
+### Task: Start Mobile Implementation (AFTER BACKEND)
+
+1. Initialize React Native project with Expo
+2. Set up TypeScript configuration
+3. Create navigation structure
+4. Set up API client to connect to backend
+5. Create first screen (e.g., landing/onboarding)
+6. Test on iOS/Android simulators
+
+### Task: Optimize a slow query (Once backend/ exists)
 
 1. Identify slow query in logs (> 100ms)
-
 2. Run `EXPLAIN ANALYZE` in PostgreSQL
-
 3. Add appropriate indexes
-
 4. Consider materialized views for aggregations
-
 5. Add query result caching in Redis
-
 6. Monitor improvement in Grafana
 
- 
-
-### Task: Fix a bug
-
- 
+### Task: Fix a bug (Once code exists)
 
 1. Reproduce bug locally
-
 2. Write failing test that captures bug
-
 3. Fix code to make test pass
-
 4. Ensure no regressions
-
 5. Add to changelog
 
  
@@ -1312,67 +1338,63 @@ kubectl rollout status deployment/backend
 
 ## FAQ for AI Agents
 
- 
+**Q: What's the current state of the codebase?**
 
-**Q: Which file should I edit to add a new API endpoint?**
+A: This is a planning/documentation repository. No implementation code exists yet. We have comprehensive docs (ARCHITECTURE.md, API_SPEC.md, etc.) and Docker Compose configuration, but no backend/, mobile/, web/, or other implementation directories.
 
-A: Create a new file in `backend/app/api/v1/` or add to existing route file. See `backend/app/api/v1/analysis.py` for examples.
+**Q: Where should I start if I want to begin implementation?**
 
- 
+A: Start with the backend:
+1. Create the `backend/` directory structure
+2. Follow the directory layout described in this file
+3. Reference API_SPEC.md for API contracts
+4. Reference ARCHITECTURE.md for architecture patterns
+5. Use docker-compose.yaml which is already configured for all services
 
-**Q: How do I test video processing locally?**
+**Q: Which files exist and which don't?**
 
-A: Use sample videos in `backend/tests/fixtures/videos/`. Run `pytest -k video` to run video tests.
+A: **Exist**: CLAUDE.md, README.md, ARCHITECTURE.md, API_SPEC.md, ROADMAP.md, REAL_TIME_ANALYSIS.md, GETTING_STARTED.md, docker-compose.yaml, .env.example, .gitignore, quickstart.sh
+**Don't exist yet**: backend/, mobile/, web/, ml/, infrastructure/, docs/ (subdirectory), .github/workflows/, scripts/ (except quickstart.sh)
 
- 
+**Q: How do I run the full stack locally?**
 
-**Q: What's the process for updating the AI prompt?**
+A: Currently, only infrastructure services work: `docker-compose up` starts PostgreSQL, Redis, MinIO, Prometheus, Grafana, pgAdmin. Backend, mobile, and web services are configured in docker-compose.yaml but will fail until implementation code is created.
 
-A: Edit prompt in `backend/app/services/prompts/`, test with sample videos, update tests, then deploy. Always version prompts for rollback.
+**Q: Where are the design mockups?**
 
- 
+A: Design specs are referenced in ARCHITECTURE.md and REAL_TIME_ANALYSIS.md. A dedicated `/docs/features/` subdirectory with detailed specs is planned but not created yet.
 
-**Q: How do I add a new database table?**
+**Q: What's the branching strategy?**
+
+A: Feature branches off `develop`, PR to `develop`, then merge to `main` for production. See Git Workflow section above.
+
+**Q: How do I handle breaking API changes (once implemented)?**
+
+A: API versioning (`/api/v1/`, `/api/v2/`). Maintain v1 for 6 months after v2 launch. Update client SDK versions.
+
+**Q: Which file should I edit to add a new API endpoint (once implemented)?**
+
+A: Create a new file in `backend/app/api/v1/` or add to existing route file. Reference API_SPEC.md for endpoint specifications.
+
+**Q: How do I add a new database table (once implemented)?**
 
 A: Create model in `backend/app/models/`, create Alembic migration with `alembic revision --autogenerate -m "description"`, review migration, then `alembic upgrade head`.
 
  
 
-**Q: Where are the design mockups?**
-
-A: `/docs/features/` contains feature specs with design references. Full Figma designs linked in README.
-
- 
-
-**Q: How do I run the full stack locally?**
-
-A: `docker-compose up` starts all services. Backend at :8000, web at :3000, mobile via Expo.
-
- 
-
-**Q: What's the branching strategy?**
-
-A: Feature branches off `develop`, PR to `develop`, then merge to `main` for production. See Git Workflow section.
-
- 
-
-**Q: How do I handle breaking API changes?**
-
-A: API versioning (`/api/v1/`, `/api/v2/`). Maintain v1 for 6 months after v2 launch. Update client SDK versions.
-
- 
-
 ## Getting Help
 
- 
+- **Documentation**: Read root-level .md files (ARCHITECTURE.md, API_SPEC.md, ROADMAP.md, etc.)
 
-- **Documentation**: Read `/docs` directory
+- **Infrastructure**: Review docker-compose.yaml for service configuration
 
-- **Examples**: Check `backend/tests/` and `mobile/src/` for patterns
+- **Environment Setup**: Check .env.example for all configuration options
 
-- **API Docs**: Run backend, visit http://localhost:8000/docs
+- **Getting Started**: Read GETTING_STARTED.md for onboarding guide
 
-- **Slack**: #golfcoach-dev channel
+- **Examples**: Once implementation begins, check `backend/tests/` and `mobile/src/` for patterns
+
+- **API Docs**: Once backend is implemented, run backend and visit http://localhost:8000/docs
 
 - **Issues**: GitHub Issues with appropriate labels
 
@@ -1380,84 +1402,89 @@ A: API versioning (`/api/v1/`, `/api/v2/`). Maintain v1 for 6 months after v2 la
 
 ## Useful Commands
 
- 
+**Currently Available:**
 
 ```bash
+# Infrastructure Services (Currently Available)
+docker-compose up                   # Start all infrastructure services
+docker-compose up -d postgres redis minio  # Start only core services
+docker-compose logs -f postgres     # View PostgreSQL logs
+docker-compose down                 # Stop all services
+docker-compose down -v              # Stop and remove volumes (full cleanup)
 
-# Backend
+# Environment Setup
+cp .env.example .env                # Create environment file
+./quickstart.sh                     # Run automated setup script
 
+# Git Operations
+git status                          # Check repository status
+git log --oneline -10              # View recent commits
+```
+
+**Once Implementation Begins:**
+
+```bash
+# Backend (once backend/ directory exists)
 cd backend
-
 python -m pytest                    # Run tests
-
 uvicorn app.main:app --reload      # Run dev server
-
 alembic upgrade head               # Run migrations
-
 black .                            # Format code
-
 ruff check .                       # Lint code
 
- 
-
-# Mobile
-
+# Mobile (once mobile/ directory exists)
 cd mobile
-
 npm test                           # Run tests
-
 npm start                          # Start Expo dev server
-
 npm run ios                        # Run iOS simulator
-
 npm run android                    # Run Android emulator
 
- 
-
-# Web
-
+# Web (once web/ directory exists)
 cd web
-
 npm test                           # Run tests
-
 npm run dev                        # Start Next.js dev server
-
 npm run build                      # Build for production
 
- 
-
-# Infrastructure
-
-docker-compose up                  # Run local stack
-
+# Infrastructure (once infrastructure/ directory exists)
 kubectl get pods                   # Check deployments
-
 terraform plan                     # Preview infrastructure changes
-
 ```
 
  
 
 ## Key Files to Review
 
- 
+**Currently Available (Planning Phase):**
 
-1. **`/docs/ARCHITECTURE.md`** - Deep dive on system design
+1. **`CLAUDE.md`** (this file) - AI agent development guide with architecture patterns
+2. **`ARCHITECTURE.md`** - Deep dive on system design and data flow
+3. **`API_SPEC.md`** - Complete API reference and endpoint specifications
+4. **`ROADMAP.md`** - Development priorities and implementation phases
+5. **`REAL_TIME_ANALYSIS.md`** - Feature specification for real-time swing analysis
+6. **`GETTING_STARTED.md`** - Developer onboarding and setup guide
+7. **`docker-compose.yaml`** - Complete infrastructure service configuration
+8. **`.env.example`** - Environment variables and configuration options
+9. **`README.md`** - Project overview and quick start guide
 
-2. **`/docs/API_SPEC.md`** - Complete API reference
+**To Be Created (Implementation Phase):**
 
-3. **`/docs/features/`** - Feature specifications
-
-4. **`/backend/app/services/ai_coach.py`** - AI integration
-
-5. **`/mobile/src/screens/AnalysisScreen.tsx`** - Main UI
-
-6. **`/ROADMAP.md`** - Development priorities
-
- 
+- `backend/app/services/ai_coach.py` - AI integration (see code examples in this file)
+- `backend/app/main.py` - FastAPI application entry point
+- `mobile/src/screens/AnalysisScreen.tsx` - Main analysis UI
+- `docs/features/` - Detailed feature specifications subdirectory
+- `.github/workflows/` - CI/CD pipeline definitions
 
 ---
 
- 
+## Summary for AI Agents
+
+**Current State**: This is a **documentation-first repository** in the planning phase. Comprehensive architecture, API specs, and infrastructure configuration exist, but no implementation code yet.
+
+**Next Steps**: When ready to begin implementation:
+1. Start with backend (create `backend/` directory and FastAPI skeleton)
+2. Reference API_SPEC.md for exact API contracts
+3. Use the provided docker-compose.yaml for local development
+4. Follow the architecture patterns documented in this file
+5. Implement features according to ROADMAP.md priorities
 
 **Remember**: This is a premium product for serious golfers. Every feature should be polished, fast, and delightful. We're building the tool Tiger Woods would want to use.
