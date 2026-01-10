@@ -6,7 +6,29 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from app.api.v1 import auth as auth_module
+from app.core.config import settings
 from app.models.user import User
+
+
+class FakeRedis:
+    def __init__(self) -> None:
+        self.store: dict[str, str] = {}
+        self.ttl: dict[str, int] = {}
+
+    def setex(self, key: str, ttl: int, value: str) -> None:
+        self.store[key] = value
+        self.ttl[key] = ttl
+
+    def get(self, key: str) -> str | None:
+        return self.store.get(key)
+
+
+@pytest.fixture()
+def fake_redis(monkeypatch: pytest.MonkeyPatch) -> FakeRedis:
+    fake = FakeRedis()
+    monkeypatch.setattr(auth_module, "get_redis", lambda: fake)
+    return fake
 
 
 def test_register_user(client: TestClient, test_user_data: dict) -> None:
@@ -103,7 +125,7 @@ def test_login_nonexistent_user(client: TestClient) -> None:
     assert response.status_code == 401
 
 
-def test_refresh_token(client: TestClient, test_user: User) -> None:
+def test_refresh_token(client: TestClient, test_user: User, fake_redis: FakeRedis) -> None:
     """Test token refresh."""
     # First, login to get tokens
     login_response = client.post(
@@ -125,7 +147,7 @@ def test_refresh_token(client: TestClient, test_user: User) -> None:
     assert "expires_in" in data
 
 
-def test_refresh_token_invalid(client: TestClient) -> None:
+def test_refresh_token_invalid(client: TestClient, fake_redis: FakeRedis) -> None:
     """Test token refresh with invalid token fails."""
     response = client.post(
         "/api/v1/auth/refresh", json={"refresh_token": "invalid_token"}
@@ -133,7 +155,26 @@ def test_refresh_token_invalid(client: TestClient) -> None:
     assert response.status_code == 401
 
 
-def test_logout(client: TestClient, test_user: User) -> None:
+def test_refresh_token_rejects_blacklisted(
+    client: TestClient, test_user: User, fake_redis: FakeRedis
+) -> None:
+    """Test token refresh rejects blacklisted refresh token."""
+    login_response = client.post(
+        "/api/v1/auth/login",
+        json={"email": "test@example.com", "password": "TestPassword123!"},
+    )
+    refresh_token = login_response.json()["refresh_token"]
+
+    ttl_seconds = settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60
+    fake_redis.setex(f"blacklist:{refresh_token}", ttl_seconds, "1")
+
+    response = client.post(
+        "/api/v1/auth/refresh", json={"refresh_token": refresh_token}
+    )
+    assert response.status_code == 401
+
+
+def test_logout(client: TestClient, test_user: User, fake_redis: FakeRedis) -> None:
     """Test logout."""
     # First, login to get tokens
     login_response = client.post(
@@ -145,3 +186,9 @@ def test_logout(client: TestClient, test_user: User) -> None:
     # Now logout
     response = client.post("/api/v1/auth/logout", json={"refresh_token": refresh_token})
     assert response.status_code == 204
+    blacklist_key = f"blacklist:{refresh_token}"
+    assert fake_redis.get(blacklist_key) == "1"
+    assert (
+        fake_redis.ttl[blacklist_key]
+        == settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60
+    )
