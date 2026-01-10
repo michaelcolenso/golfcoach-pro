@@ -29,9 +29,21 @@ def upgrade() -> None:
         sa.Column('password_hash', sa.String(length=255), nullable=False),
         sa.Column('full_name', sa.String(length=255), nullable=True),
         sa.Column('handicap', sa.Numeric(precision=3, scale=1), nullable=True),
-        sa.Column('created_at', sa.DateTime(), nullable=False, server_default=sa.text('NOW()')),
-        sa.Column('updated_at', sa.DateTime(), nullable=False, server_default=sa.text('NOW()')),
+        sa.Column(
+            'created_at',
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text('NOW()'),
+        ),
+        sa.Column(
+            'updated_at',
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text('NOW()'),
+            server_onupdate=sa.text('NOW()'),
+        ),
         sa.PrimaryKeyConstraint('id'),
+        sa.CheckConstraint('handicap >= 0.0 AND handicap <= 54.0', name='ck_users_handicap_range'),
         sa.UniqueConstraint('email')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
@@ -41,14 +53,31 @@ def upgrade() -> None:
     op.create_table(
         'user_profiles',
         sa.Column('user_id', sa.Integer(), nullable=False),
-        sa.Column('date_of_birth', sa.DateTime(), nullable=True),
+        sa.Column('date_of_birth', sa.Date(), nullable=True),
         sa.Column('height_cm', sa.Integer(), nullable=True),
         sa.Column('weight_kg', sa.Integer(), nullable=True),
         sa.Column('dominant_hand', sa.String(length=10), nullable=True),
         sa.Column('primary_miss', sa.String(length=20), nullable=True),
-        sa.Column('goals', sa.JSON(), nullable=True),
-        sa.Column('physical_limitations', sa.JSON(), nullable=True),
-        sa.Column('updated_at', sa.DateTime(), nullable=False, server_default=sa.text('NOW()')),
+        sa.Column('goals', sa.JSON(), nullable=False, server_default=sa.text("'[]'::json")),
+        sa.Column(
+            'physical_limitations',
+            sa.JSON(),
+            nullable=False,
+            server_default=sa.text("'[]'::json"),
+        ),
+        sa.Column(
+            'updated_at',
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text('NOW()'),
+            server_onupdate=sa.text('NOW()'),
+        ),
+        sa.CheckConstraint('height_cm >= 50 AND height_cm <= 300', name='ck_user_profiles_height_cm_range'),
+        sa.CheckConstraint('weight_kg >= 20 AND weight_kg <= 300', name='ck_user_profiles_weight_kg_range'),
+        sa.CheckConstraint(
+            "dominant_hand IN ('left', 'right')",
+            name='ck_user_profiles_dominant_hand',
+        ),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('user_id')
     )
