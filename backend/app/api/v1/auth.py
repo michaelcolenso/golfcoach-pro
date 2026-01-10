@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.security import verify_token, generate_tokens
+from app.core.dependencies import get_redis
+from app.core.config import settings
 from app.schemas.user import (
     UserCreate,
     UserLogin,
@@ -96,6 +98,14 @@ async def refresh_token(token_data: TokenRefresh, db: Session = Depends(get_db))
         payload = verify_token(token_data.refresh_token, token_type="refresh")
         user_id = int(payload.get("sub"))
 
+        redis_client = get_redis()
+        blacklist_key = f"blacklist:{token_data.refresh_token}"
+        if redis_client.get(blacklist_key):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Refresh token has been revoked",
+            )
+
         # Verify user exists
         user = UserService.get_user_by_id(db, user_id)
         if not user:
@@ -138,12 +148,10 @@ async def logout(logout_data: LogoutRequest) -> None:
     Returns:
         No content (204)
     """
-    # TODO: Implement token blacklist in Redis
-    # Example:
-    # redis_client = get_redis()
-    # redis_client.setex(
-    #     f"blacklist:{logout_data.refresh_token}",
-    #     settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-    #     "1"
-    # )
-    pass
+    redis_client = get_redis()
+    ttl_seconds = settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60
+    redis_client.setex(
+        f"blacklist:{logout_data.refresh_token}",
+        ttl_seconds,
+        "1",
+    )
