@@ -328,6 +328,9 @@ models/
 
 checkpoints/
 
+!backend/app/models/
+!backend/app/models/**
+
  
 
 # ============================================

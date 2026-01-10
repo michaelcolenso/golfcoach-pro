@@ -21,6 +21,12 @@ from app.schemas.user import (
     BiometricsAverage,
     LogoutRequest,
 )
+from app.schemas.swing import (
+    SwingUploadRequest,
+    SwingUploadResponse,
+    SwingSummaryResponse,
+    SwingDetailResponse,
+)
 
 __all__ = [
     "UserBase",
@@ -40,4 +46,8 @@ __all__ = [
     "IssueFrequency",
     "BiometricsAverage",
     "LogoutRequest",
+    "SwingUploadRequest",
+    "SwingUploadResponse",
+    "SwingSummaryResponse",
+    "SwingDetailResponse",
 ]
